@@ -1,28 +1,35 @@
-.App {
-  text-align: center;
+.app {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+}
+.navHeader {
+    background-color: #0051a2;
+    color: #eee;
+}
+main.content {
+    flex-grow: 1;
+}
+.index {
+    padding: 0 30px;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+article.Weapon {
+    padding: 20px;
+}
+article.Weapon header {
+    font-size: 30px;
 }
 
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
+article.Weapon .label {
+    text-align: right;
+    padding-right: 5px;
+    font-weight: bold;
 }
 
-.App-title {
-  font-size: 1.5em;
+article.Weapon .rulesText {
 }
 
-.App-intro {
-  font-size: large;
-}
-
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+article.Weapon .flavorText {
+    font-style: italic;
 }
