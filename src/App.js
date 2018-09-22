@@ -5,6 +5,7 @@ import { Switch, Route, Link } from "react-router-dom";
 import Weapons from "./Weapons";
 import Systems from "./Systems";
 import Actions from "./Actions";
+import Shells from "./Shells";
 import './App.css';
 
 class App extends Component {
@@ -28,6 +29,7 @@ class App extends Component {
                       <Route path="/weapons" component={Weapons}/>
                       <Route path="/systems" component={Systems}/>
                       <Route path="/actions" component={Actions}/>
+                      <Route path="/shells" component={Shells}/>
                   </Switch> }
               </main>
           </StoreContext.Provider>
@@ -55,6 +57,7 @@ const Index = () => (
             <li><Link to="/weapons">Weapons List</Link></li>
             <li><Link to="/systems">Systems List</Link></li>
             <li><Link to="/actions">Actions List</Link></li>
+            <li><Link to="/shells">Shells List</Link></li>
         </ul>
         </section>
     </div>

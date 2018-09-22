@@ -18,7 +18,7 @@ const Action = ({store, match}) => {
             <table>
                 <tbody>
                 { data.flavor ? <tr><td className="flavorText" colSpan="2">{data.flavor}</td></tr> : null }
-                <tr><td className="label">Source:</td><td className="value"><Link to={`/${data.parentType}/${data.parentId}`}>{parent.name}</Link></td></tr>
+                { data.parentType && data.parentId ? <tr><td className="label">Source:</td><td className="value"><Link to={`/${data.parentType}/${data.parentId}`}>{parent.name}</Link></td></tr> : null }
                 <tr><td className="label">Type:</td><td className="value">{data.type}</td></tr>
                 <tr><td className="label">Tags:</td><td className="value">{getTagText(data.tags)}</td></tr>
                 { data.range ? <tr><td className="label">Range:</td><td className="value">{getRangeText(data.range, null)}</td></tr> : null}

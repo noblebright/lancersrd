@@ -88,3 +88,9 @@ export function getLicense(license, source) {
     }
     return source;
 }
+
+export function getStatsText(stats) {
+    return Object.keys(stats).sort()
+        .map(stat => `${stats[stat] > 0 ? "+" : ""}${stats[stat]} ${stat}`)
+        .join(", ");
+}
