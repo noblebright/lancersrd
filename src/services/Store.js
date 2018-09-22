@@ -5,7 +5,7 @@ export const StoreContext = React.createContext("store");
 
 const fields = ["pilotGear", "coreBonuses", "shells", "weapons", "systems", "actions", "statuses", "tags", "talents"];
 
-const sources = ["https://gist.githubusercontent.com/noblebright/4f3c03becfc1b8133b965be0e33e4660/raw/18349fa866572d97afdf21113b0267018c9fc201/GMS.json"];
+const sources = ["https://gist.githubusercontent.com/noblebright/4f3c03becfc1b8133b965be0e33e4660/raw/1d6597a2ed6a27221751b2611e05e32c69ac5495/GMS.json"];
 
 export function load() {
     return Promise.all(sources.map(url => get(url))).then(transformStore);

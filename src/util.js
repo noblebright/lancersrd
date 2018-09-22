@@ -49,6 +49,8 @@ export function getRangeText(ranges, threat) {
                     return `Cone ${ranges[range][0]}`;
                 case "blast":
                     return `${ranges[range][0]}, Blast ${ranges[range][1]}`;
+                case "burst":
+                    return `Burst ${ranges[range]}`;
                 default:
                     return `WARNING! Unknown range type: ${range}`;
             }
