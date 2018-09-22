@@ -18,6 +18,7 @@ const System = ({store, match}) => {
                 <tbody>
                 { data.flavor ? <tr><td className="flavorText" colSpan="2">{data.flavor}</td></tr> : null }
                 <tr><td className="label">License:</td><td className="value">{getLicense(data.license, data.source)}</td></tr>
+                <tr><td className="label">SP Cost:</td><td className="value">{data.sp}</td></tr>
                 <tr><td className="label">Tags:</td><td className="value">{getTagText(data.tags)}</td></tr>
                 { data.ranges ? <tr><td className="label">Range:</td><td className="value">{getRangeText(data.range, data.threat)}</td></tr> : null}
                 { data.text ? <tr><td className="rulesText" colSpan="2"><Markdown>{data.text}</Markdown></td></tr> : null }
