@@ -3,6 +3,8 @@ import { Navbar, NavbarBrand, Jumbotron } from "reactstrap";
 import { StoreContext, load } from "./services/Store";
 import { Switch, Route, Link } from "react-router-dom";
 import Weapons from "./Weapons";
+import Systems from "./Systems";
+import Actions from "./Actions";
 import './App.css';
 
 class App extends Component {
@@ -24,6 +26,8 @@ class App extends Component {
                   <Switch>
                       <Route exact path="/" component={Index}/>
                       <Route path="/weapons" component={Weapons}/>
+                      <Route path="/systems" component={Systems}/>
+                      <Route path="/actions" component={Actions}/>
                   </Switch> }
               </main>
           </StoreContext.Provider>
@@ -48,7 +52,9 @@ const Index = () => (
         <section className="index">
         <h3>Gear Lists</h3>
         <ul>
-            <Link to="/weapons">Weapons List</Link>
+            <li><Link to="/weapons">Weapons List</Link></li>
+            <li><Link to="/systems">Systems List</Link></li>
+            <li><Link to="/actions">Actions List</Link></li>
         </ul>
         </section>
     </div>

@@ -14,22 +14,36 @@ main.content {
     padding: 0 30px;
 }
 
-article.Weapon {
+article.Card {
     padding: 20px;
 }
-article.Weapon header {
+
+article.Card > table {
+    width: 100%;
+}
+
+article.Card header {
     font-size: 30px;
 }
 
-article.Weapon .label {
+article.Card .label {
     text-align: right;
     padding-right: 5px;
     font-weight: bold;
 }
 
-article.Weapon .rulesText {
+article.Card .value {
+    width: 100%;
 }
 
-article.Weapon .flavorText {
+article.Card .rulesText {
+    padding-top: 10px;
+}
+
+article.Card .flavorText {
     font-style: italic;
+}
+
+.markdownRef {
+    vertical-align: super;
 }
