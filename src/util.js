@@ -1,7 +1,8 @@
 import React from "react";
 import {Link} from "react-router-dom";
+import {withStore} from "./services/Store";
 
-export const ListView = ({ data, name, url }) => {
+export const ListView = ({ data, name, url, hideSource }) => {
     return (
         <section className="index">
             <h1>{name} List</h1>
@@ -10,7 +11,7 @@ export const ListView = ({ data, name, url }) => {
                     const current = data[id];
                     return (
                         <div key={id}>
-                            <Link to={`/${url}/${id}`}>{current.source} {current.name}</Link>
+                            <Link to={`/${url}/${id}`}>{ hideSource ? current.name : `${current.source} ${current.name}`}</Link>
                         </div>
                     );
                 })}
@@ -20,7 +21,31 @@ export const ListView = ({ data, name, url }) => {
     );
 };
 
-export function getTagText(tags) {
+const TagList = ({store, tags}) => {
+    let tagList = Object.keys(tags).sort();
+    let elementList = [];
+    for(let i = 0; i < tagList.length; i++) {
+        let tag = tagList[i];
+        if(i !== 0) {
+            elementList.push(<span key={2*i - 1}>, </span>);
+        }
+        if(store.tagDefs[tag]) {
+            const name = store.tagDefs[tag].name;
+            elementList.push(<Link key={2*i} to={`/tags/${tag}`}>{tags[tag] === true ? name : `${name} ${tags[tag]}`}</Link>);
+        } else {
+            elementList.push(<span key={2*i}>{tag}</span>);
+        }
+    }
+    return (
+        <React.Fragment>
+            {elementList}
+        </React.Fragment>
+    );
+};
+
+export const Tags = withStore(TagList);
+
+export function getTagText(store, tags) {
     const tagList = Object.keys(tags).sort().map(tag => {
         if(tags[tag] === true) {
             return tag;
@@ -95,4 +120,8 @@ export function getStatsText(stats) {
     return Object.keys(stats).sort()
         .map(stat => `${stats[stat] > 0 ? "+" : ""}${stats[stat]} ${stat}`)
         .join(", ");
+}
+
+export function getParent(store, data) {
+    return data && data.parentType && data.parentId ? store[data.parentType][data.parentId] : null;
 }

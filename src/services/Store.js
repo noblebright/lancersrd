@@ -3,9 +3,13 @@ import { get } from "./NetService";
 
 export const StoreContext = React.createContext("store");
 
-const fields = ["pilotGear", "coreBonuses", "shells", "weapons", "systems", "actions", "statuses", "tags", "talents"];
+//renamed tags to tagDefs to avoid conflicting definitions with usages.
+const fields = ["pilotGear", "coreBonuses", "shells", "weapons", "systems", "actions", "statuses", "tagDefs", "talents"];
 
-const sources = ["https://gist.githubusercontent.com/noblebright/4f3c03becfc1b8133b965be0e33e4660/raw/1d6597a2ed6a27221751b2611e05e32c69ac5495/GMS.json"];
+const sources = [
+    "https://raw.githubusercontent.com/noblebright/lancerdata/master/core.json",
+    "https://raw.githubusercontent.com/noblebright/lancerdata/master/GMS.json"
+];
 
 export function load() {
     return Promise.all(sources.map(url => get(url))).then(transformStore);
@@ -23,7 +27,9 @@ function transformStore(results) {
 }
 
 function processSource(store, result) {
-    store.corps[result.meta.abbrev] = result.meta;
+    if(!result.meta.dummyCorp) {
+        store.corps[result.meta.abbrev] = result.meta;
+    }
     fields.forEach(field => {
         result[field] && result[field].forEach(item => {
             item.source = result.meta.abbrev;

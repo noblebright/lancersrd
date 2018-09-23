@@ -6,6 +6,8 @@ import Weapons from "./Weapons";
 import Systems from "./Systems";
 import Actions from "./Actions";
 import Shells from "./Shells";
+import Statuses from "./Statuses";
+import TagDefs from "./TagDefs";
 import './App.css';
 
 class App extends Component {
@@ -30,6 +32,8 @@ class App extends Component {
                       <Route path="/systems" component={Systems}/>
                       <Route path="/actions" component={Actions}/>
                       <Route path="/shells" component={Shells}/>
+                      <Route path="/statuses" component={Statuses}/>
+                      <Route path="/tags" component={TagDefs}/>
                   </Switch> }
               </main>
           </StoreContext.Provider>
@@ -56,8 +60,10 @@ const Index = () => (
         <ul>
             <li><Link to="/weapons">Weapons List</Link></li>
             <li><Link to="/systems">Systems List</Link></li>
-            <li><Link to="/actions">Actions List</Link></li>
+            <li><Link to="/actions">Granted Actions List</Link></li>
             <li><Link to="/shells">Shells List</Link></li>
+            <li><Link to="/statuses">Statuses List</Link></li>
+            <li><Link to="/tags">Tags List</Link></li>
         </ul>
         </section>
     </div>
