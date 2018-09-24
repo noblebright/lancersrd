@@ -8,6 +8,7 @@ import Actions from "./Actions";
 import Shells from "./Shells";
 import Statuses from "./Statuses";
 import TagDefs from "./TagDefs";
+import CoreBonuses from "./CoreBonuses";
 import './App.css';
 
 class App extends Component {
@@ -28,6 +29,7 @@ class App extends Component {
                   {!this.state.loaded ? <div>loading...</div> :
                   <Switch>
                       <Route exact path="/" component={Index}/>
+                      <Route path="/coreBonuses" component={CoreBonuses}/>
                       <Route path="/weapons" component={Weapons}/>
                       <Route path="/systems" component={Systems}/>
                       <Route path="/actions" component={Actions}/>
@@ -58,6 +60,7 @@ const Index = () => (
         <section className="index">
         <h3>Gear Lists</h3>
         <ul>
+            <li><Link to="/coreBonuses">Core Bonuses List</Link></li>
             <li><Link to="/weapons">Weapons List</Link></li>
             <li><Link to="/systems">Systems List</Link></li>
             <li><Link to="/actions">Granted Actions List</Link></li>
