@@ -4,11 +4,12 @@ import { get } from "./NetService";
 export const StoreContext = React.createContext("store");
 
 //renamed tags to tagDefs to avoid conflicting definitions with usages.
-const fields = ["pilotGear", "coreBonuses", "shells", "weapons", "systems", "actions", "statuses", "tagDefs", "talents"];
+const fields = ["pilotGear", "coreBonuses", "shells", "weapons", "systems", "actions", "statuses", "tagDefs"];
 
 const sources = [
     "https://raw.githubusercontent.com/noblebright/lancerdata/master/core.json",
-    "https://raw.githubusercontent.com/noblebright/lancerdata/master/GMS.json"
+    "https://raw.githubusercontent.com/noblebright/lancerdata/master/GMS.json",
+    "https://raw.githubusercontent.com/noblebright/lancerdata/master/IPS-N.json"
 ];
 
 export function load() {
@@ -16,36 +17,71 @@ export function load() {
 }
 
 function transformStore(results) {
-    const store = { corps: {} };
+    const store = { corps: {}, licenses: {} };
     fields.forEach(field => store[field] = {});
-    results.forEach(result => {
-        processSource(store, result);
+    results.forEach((result, idx) => {
+        processSource(store, result, sources[idx]);
+        if(result.licenses) {
+            processLicenses(store, result);
+        }
     });
     store.loaded = true;
     console.log(store);
     return store;
 }
 
-function processSource(store, result) {
+//TODO: Unify license and non-license recursive processing
+function processSource(store, result, url) {
+    result.meta.url = url;
     if(!result.meta.dummyCorp) {
-        store.corps[result.meta.abbrev] = result.meta;
+        store.corps[result.meta.corpId] = result.meta;
     }
     fields.forEach(field => {
-        result[field] && result[field].forEach(item => {
-            item.source = result.meta.abbrev;
-            store[field][item.id] = item;
-            processItem(store, item, field, item.source);
+        if(result[field]) {
+            processCollection(store, result.meta, result[field], field);
+        }
+    });
+}
+
+function processCollection(store, meta, collection, category, licenseInfo, parentType, parentId) {
+    collection.forEach(item => {
+        item.corpId = meta.corpId;
+        item.author = meta.author;
+        item.srcUrl = meta.url;
+        store[category][item.id] = item;
+        if(licenseInfo) {
+            item.license = Object.assign(item.license || {}, licenseInfo);
+        }
+        if(parentType && parentId) {
+            item.parentType = parentType;
+            item.parentId = parentId;
+        }
+        fields.forEach(field => {
+            if(item[field]) {
+                processCollection(store, meta, item[field], field, licenseInfo, category, item.id);
+            }
         });
     });
 }
 
-function processItem(store, item, type, source) {
-    fields.forEach(field => {
-        item[field] && Object.keys(item[field]).forEach(key => {
-            store[field][key] = { ...item[field][key], id: key, source, parentType: type, parentId: item.id };
-        });
+function processLicenses(store, result) {
+    const corpId = result.meta.corpId;
+    if(!store.licenses[corpId]) {
+        store.licenses[corpId] = {};
+    }
+    Object.keys(result.licenses).forEach(licenseId => {
+        const { name, summary, flavor, levels } = result.licenses[licenseId];
+        store.licenses[corpId][licenseId] = { name, summary, flavor, id: licenseId };
+        levels && levels.forEach((collection, licenseLevel) => {
+            fields.forEach(field => {
+                if(collection[field]) {
+                    processCollection(store, result.meta, collection[field], field, { line: licenseId, level: licenseLevel + 1 });
+                }
+            });
+        })
     });
 }
+
 export function withStore(Component) {
     return (props) => (
         <StoreContext.Consumer>

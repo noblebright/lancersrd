@@ -1,7 +1,7 @@
 import React from 'react';
 import { withStore } from "./services/Store";
 import {Switch, Route, Link} from "react-router-dom";
-import { ListView, getLicense, getDamageText, getRangeText, Tags, getParent } from "./util";
+import { ListView, License, getDamageText, getRangeText, Tags, getParent } from "./util";
 import Markdown from "./markdown/Markdown";
 
 const WeaponIndex = ({store}) => (<ListView data={store.weapons} url="weapons" name="Weapons"/>);
@@ -17,9 +17,9 @@ const Weapon = ({store, match}) => {
             <header>{data.name}</header>
             <table>
                 <tbody>
-                { data.flavor ? <tr><td className="flavorText" colSpan="2">{data.flavor}</td></tr> : null }
+                { data.flavor ? <tr><td className="flavorText" colSpan="2"><Markdown>{data.flavor}</Markdown></td></tr> : null }
                 { parent ? <tr><td className="label">Source:</td><td className="value"><Link to={`/${data.parentType}/${data.parentId}`}>{parent.name}</Link></td></tr> : null }
-                <tr><td className="label">License:</td><td className="value">{getLicense(data.license, data.source)}</td></tr>
+                <tr><td className="label">License:</td><td className="value"><License license={data.license} corpId={data.corpId}/></td></tr>
                 <tr><td className="label">Type:</td><td className="value">{data.size} {data.type}</td></tr>
                 <tr><td className="label">Tags:</td><td className="value"><Tags tags={data.tags}/></td></tr>
                 <tr><td className="label">Range:</td><td className="value">{getRangeText(data.range, data.threat)}</td></tr>

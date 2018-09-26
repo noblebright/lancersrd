@@ -17,7 +17,7 @@ const Action = ({store, match}) => {
             <header>{data.name}</header>
             <table>
                 <tbody>
-                { data.flavor ? <tr><td className="flavorText" colSpan="2">{data.flavor}</td></tr> : null }
+                { data.flavor ? <tr><td className="flavorText" colSpan="2"><Markdown>{data.flavor}</Markdown></td></tr> : null }
                 { parent ? <tr><td className="label">Source:</td><td className="value"><Link to={`/${data.parentType}/${data.parentId}`}>{parent.name}</Link></td></tr> : null }
                 <tr><td className="label">Type:</td><td className="value">{data.type}</td></tr>
                 <tr><td className="label">Tags:</td><td className="value"><Tags tags={data.tags}/></td></tr>

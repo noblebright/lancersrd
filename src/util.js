@@ -11,7 +11,7 @@ export const ListView = ({ data, name, url, hideSource }) => {
                     const current = data[id];
                     return (
                         <div key={id}>
-                            <Link to={`/${url}/${id}`}>{ hideSource ? current.name : `${current.source} ${current.name}`}</Link>
+                            <Link to={`/${url}/${id}`}>{ hideSource ? current.name : `${current.corpId} ${current.name}`}</Link>
                         </div>
                     );
                 })}
@@ -44,6 +44,22 @@ const TagList = ({store, tags}) => {
 };
 
 export const Tags = withStore(TagList);
+
+const DumbLicense = ({store, license, corpId}) => {
+    const {line, level, talent, shell} = license;
+    if((line && level)) {
+        return <Link to={`/licenses/${line}`}>{`${store.licenses[corpId][line].name} ${"I".repeat(level * 1)}`}</Link>;
+    }
+    if(talent && level) {
+        return <span>{`${talent} ${"I".repeat(level * 1)}`}</span>;
+    }
+    if(shell) {
+        return <Link to={`/shells/${shell}`}>{`${shell} SHELL`}</Link>;
+    }
+    return <Link to={`/corps/${corpId}`}>{store.corps[corpId].name}</Link>;
+};
+
+export const License = withStore(DumbLicense);
 
 export function getTagText(store, tags) {
     const tagList = Object.keys(tags).sort().map(tag => {
@@ -100,20 +116,6 @@ export function getDamageText(damages) {
         }
     });
     return damageList.join(" + ");
-}
-
-export function getLicense(license, source) {
-    const {line, level, talent, shell} = license;
-    if((line && level)) {
-        return `${line} ${"I".repeat(level * 1)}`;
-    }
-    if(talent && level) {
-        return `${talent} ${"I".repeat(level * 1)}`;
-    }
-    if(shell) {
-        return `${shell} SHELL`;
-    }
-    return source;
 }
 
 export function getStatsText(stats) {

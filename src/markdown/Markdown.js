@@ -1,12 +1,10 @@
 import MarkdownJSX from 'markdown-to-jsx';
 import React from "react";
 
-import ActionRenderer from "./ActionRenderer";
+import * as renderers from "./LinkRenderers";
 
-const options = {
-    overrides: {
-        Action: ActionRenderer,
-    }
+export const options = {
+    overrides: { ...renderers }
 };
 
 const Markdown = ({children}) => (<MarkdownJSX options={options}>{children}</MarkdownJSX>);

@@ -9,6 +9,7 @@ import Shells from "./Shells";
 import Statuses from "./Statuses";
 import TagDefs from "./TagDefs";
 import CoreBonuses from "./CoreBonuses";
+import {CorpList, default as Corps} from "./Corps";
 import './App.css';
 
 class App extends Component {
@@ -36,6 +37,7 @@ class App extends Component {
                       <Route path="/shells" component={Shells}/>
                       <Route path="/statuses" component={Statuses}/>
                       <Route path="/tags" component={TagDefs}/>
+                      <Route path="/corps" component={Corps}/>
                   </Switch> }
               </main>
           </StoreContext.Provider>
@@ -57,18 +59,24 @@ const Index = () => (
                 facilitates government and industry. Data is the new wealth, and the Omninet allows for the sharing of
                 the wealth of all worlds.</p>
         </Jumbotron>
-        <section className="index">
-        <h3>Gear Lists</h3>
-        <ul>
-            <li><Link to="/coreBonuses">Core Bonuses List</Link></li>
-            <li><Link to="/weapons">Weapons List</Link></li>
-            <li><Link to="/systems">Systems List</Link></li>
-            <li><Link to="/actions">Granted Actions List</Link></li>
-            <li><Link to="/shells">Shells List</Link></li>
-            <li><Link to="/statuses">Statuses List</Link></li>
-            <li><Link to="/tags">Tags List</Link></li>
-        </ul>
-        </section>
+        <article className="columns">
+            <section className="index">
+                <h1>Gear Lists</h1>
+                <ul>
+                    <li><Link to="/coreBonuses">Core Bonuses List</Link></li>
+                    <li><Link to="/weapons">Weapons List</Link></li>
+                    <li><Link to="/systems">Systems List</Link></li>
+                    <li><Link to="/actions">Granted Actions List</Link></li>
+                    <li><Link to="/shells">Shells List</Link></li>
+                    <li><Link to="/statuses">Statuses List</Link></li>
+                    <li><Link to="/tags">Tags List</Link></li>
+                </ul>
+            </section>
+            <section className="corpIndex">
+                <h1>Corporations</h1>
+                <CorpList/>
+            </section>
+        </article>
     </div>
 );
 

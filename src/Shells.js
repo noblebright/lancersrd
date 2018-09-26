@@ -1,7 +1,7 @@
 import React from 'react';
 import { withStore } from "./services/Store";
 import {Switch, Route, Link} from "react-router-dom";
-import { ListView, getLicense, getStatsText, getParent } from "./util";
+import { ListView, License, getStatsText, getParent } from "./util";
 import Markdown from "./markdown/Markdown";
 
 const ShellIndex = ({store}) => (<ListView data={store.shells} url="shells" name="Shells"/>);
@@ -19,7 +19,7 @@ const Shell = ({store, match}) => {
                 <tbody>
                 { data.flavor ? <tr><td className="flavorText" colSpan="2"><Markdown>{data.flavor}</Markdown></td></tr> : null }
                 { parent ? <tr><td className="label">Source:</td><td className="value"><Link to={`/${data.parentType}/${data.parentId}`}>{parent.name}</Link></td></tr> : null }
-                <tr><td className="label">License:</td><td className="value">{getLicense(data.license, data.source)}</td></tr>
+                <tr><td className="label">License:</td><td className="value"><License license={data.license} corpId={data.corpId}/></td></tr>
                 <tr><td className="label">Size:</td><td className="value">{data.size}</td></tr>
                 <tr><td className="label">Armor:</td><td className="value">{data.armor}</td></tr>
                 <tr><td className="label">SP:</td><td className="value">{data.sp}</td></tr>

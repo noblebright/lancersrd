@@ -48,3 +48,7 @@ article.Card .flavorText {
 .markdownRef {
     vertical-align: super;
 }
+
+article.columns {
+    display: flex;
+}
