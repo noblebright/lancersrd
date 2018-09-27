@@ -8,6 +8,7 @@ import Actions from "./Actions";
 import Shells from "./Shells";
 import Statuses from "./Statuses";
 import TagDefs from "./TagDefs";
+import Licenses from "./Licenses";
 import CoreBonuses from "./CoreBonuses";
 import {CorpList, default as Corps} from "./Corps";
 import './App.css';
@@ -38,6 +39,7 @@ class App extends Component {
                       <Route path="/statuses" component={Statuses}/>
                       <Route path="/tags" component={TagDefs}/>
                       <Route path="/corps" component={Corps}/>
+                      <Route path="/licenses" component={Licenses}/>
                   </Switch> }
               </main>
           </StoreContext.Provider>

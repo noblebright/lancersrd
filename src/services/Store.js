@@ -25,6 +25,7 @@ function transformStore(results) {
             processLicenses(store, result);
         }
     });
+    buildIndexes(store);
     store.loaded = true;
     console.log(store);
     return store;
@@ -48,9 +49,12 @@ function processCollection(store, meta, collection, category, licenseInfo, paren
         item.corpId = meta.corpId;
         item.author = meta.author;
         item.srcUrl = meta.url;
+        item.componentType = category;
         store[category][item.id] = item;
         if(licenseInfo) {
             item.license = Object.assign(item.license || {}, licenseInfo);
+        } else {
+            item.license = item.license || {};
         }
         if(parentType && parentId) {
             item.parentType = parentType;
@@ -80,6 +84,49 @@ function processLicenses(store, result) {
             });
         })
     });
+}
+
+function buildIndexes(store) {
+    let licenseMap = Object.keys(store.licenses).reduce((acc, corp) => {
+        Object.keys(store.licenses[corp]).forEach(license => acc[license] = corp);
+        return acc;
+    }, {});
+
+    let licenseIndex = {};
+    //init licenseIndex
+    Object.keys(licenseMap).forEach(licenseId => {
+        licenseIndex[licenseId] = licenseId ? { corp: licenseMap[licenseId], levels: [] } : { corp: licenseMap[licenseId], starter: []} ;
+    });
+
+    ["weapons", "systems", "shells"].forEach(field => {
+       Object.keys(store[field]).forEach(key => {
+           const item = store[field][key];
+           if(!item.license.line && !item.license.talent) { //starter gear
+               if(!licenseIndex[""]) {
+                   console.warn(`no starter equipment corp detected!`);
+                   return;
+               }
+               licenseIndex[""].starter.push({id: item.id, componentType: field});
+           } else {
+               if(!item.license.line) {
+                   return; //skip talent items for now.
+               }
+               if(!item.license.level) {
+                   console.warn(`no license level found in ${field} ${item.id}"`);
+                   return;
+               }
+               if(!licenseIndex[item.license.line]) {
+                   console.warn(`no license holder found for "${item.license.line} in ${field} ${item.id}"`);
+                   return;
+               }
+               if(!licenseIndex[item.license.line].levels[item.license.level - 1]) {
+                   licenseIndex[item.license.line].levels[item.license.level - 1] = [];
+               }
+               licenseIndex[item.license.line].levels[item.license.level - 1].push({id: item.id, componentType: field});
+           }
+       });
+    });
+    store.licenseIndex = licenseIndex;
 }
 
 export function withStore(Component) {

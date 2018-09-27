@@ -21,7 +21,7 @@ const Corp = ({store, match}) => {
             </section>
             <h5>Licenses</h5>
             <ul>
-                {Object.keys(licenses).map(key => <Link key={key} to={`/licenses/${key}`}>{licenses[key].name} ({licenses[key].summary})</Link>)}
+                {Object.keys(licenses).map(key => <li key={key}><Link to={`/licenses/${key || "_"}`}>{licenses[key].name} ({licenses[key].summary})</Link></li>)}
             </ul>
             <footer>
                 <Link to="/corps">Back to Corps List</Link>
