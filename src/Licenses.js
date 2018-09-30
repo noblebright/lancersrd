@@ -89,10 +89,10 @@ const LicenseLevels = ({store, data}) => {
                 const name = store[item.componentType][item.id].name;
                 elementList.push(<Link key={2*j} to={`/${item.componentType}/${item.id}`}>{name}</Link>);
             }
-            levels.push(<li key={i}>{convertToRoman(i + 1)} {elementList}</li>);
+            levels.push(<li key={i}>{elementList}</li>);
         }
     }
-    return <ul>{levels}</ul>;
+    return <ol className="LicenseLevels">{levels}</ol>;
 };
 
 const ConnectedLicenseIndex = withStore(LicenseIndex);

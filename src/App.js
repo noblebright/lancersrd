@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
-import { Navbar, NavbarBrand, Jumbotron } from "reactstrap";
+import { Nav, Navbar, NavbarBrand, Jumbotron,
+         UncontrolledDropdown, DropdownItem, DropdownToggle, DropdownMenu,
+         Modal, ModalHeader, ModalBody } from "reactstrap";
 import { StoreContext, load } from "./services/Store";
+import ManageModal from "./extensibility/ManageModal";
 import { Switch, Route, Link } from "react-router-dom";
 import Weapons from "./Weapons";
 import Systems from "./Systems";
@@ -14,21 +17,49 @@ import {CorpList, default as Corps} from "./Corps";
 import './App.css';
 
 class App extends Component {
-  state = {};
+  state = { store: {} };
 
   componentDidMount() {
-      load().then(data => this.setState(data));
+      load().then(this.updateStore);
   }
+
+  toggleAboutOpen = () => {
+      this.setState({ aboutOpen : !this.state.aboutOpen });
+  };
+
+  toggleManageSource = () => {
+      this.setState({ manageSourceOpen : !this.state.manageSourceOpen });
+  };
+
+  updateStore = (store) => {
+      this.setState({store});
+  };
 
   render() {
     return (
         <div className="app">
-          <StoreContext.Provider value={this.state}>
-              <Navbar className="navHeader">
+          <StoreContext.Provider value={this.state.store}>
+              <Navbar className="navHeader" expand="md">
                   <NavbarBrand tag={Link} to="/">Omninet - Lancer SRD</NavbarBrand>
+                  <Nav className="ml-auto" navbar>
+                      <UncontrolledDropdown nav inNavbar>
+                          <DropdownToggle nav caret>
+                              Settings
+                          </DropdownToggle>
+                          <DropdownMenu right>
+                              <DropdownItem onClick={this.toggleManageSource}>Manage Data Sources...</DropdownItem>
+                              <DropdownItem divider />
+                              <DropdownItem onClick={this.toggleAboutOpen}>About...</DropdownItem>
+                          </DropdownMenu>
+                      </UncontrolledDropdown>
+                  </Nav>
               </Navbar>
+              <AboutModal isOpen={this.state.aboutOpen} onClose={this.toggleAboutOpen}/>
+              <ManageModal isOpen={this.state.manageSourceOpen}
+                        onClose={this.toggleManageSource}
+                        updateStore={this.updateStore}/>
               <main className="content">
-                  {!this.state.loaded ? <div>loading...</div> :
+                  {!this.state.store.loaded ? <div>loading...</div> :
                   <Switch>
                       <Route exact path="/" component={Index}/>
                       <Route path="/coreBonuses" component={CoreBonuses}/>
@@ -80,6 +111,16 @@ const Index = () => (
             </section>
         </article>
     </div>
+);
+
+const AboutModal = ({isOpen, onClose: handleToggle, className}) => (
+    <Modal isOpen={isOpen} toggle={handleToggle} className={className} backdrop="static">
+        <ModalHeader toggle={handleToggle}>About Lancer SRD</ModalHeader>
+        <ModalBody>
+            <div>Developed by <a target="_blank" rel="noopener noreferrer" href="http://github.com/noblebright">Noblebright</a></div>
+            <div>Lancer RPG by Miguel Lopez and Tom Parkinson Morgan</div>
+        </ModalBody>
+    </Modal>
 );
 
 export default App;

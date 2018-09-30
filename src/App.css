@@ -5,8 +5,11 @@
 }
 .navHeader {
     background-color: #0051a2;
+}
+.navHeader a {
     color: #eee;
 }
+
 main.content {
     flex-grow: 1;
 }
@@ -51,4 +54,46 @@ article.Card .flavorText {
 
 article.columns {
     display: flex;
+}
+
+ol.LicenseLevels {
+    list-style-type: upper-roman;
+}
+
+.AddModalBody section.AddSource {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.AddModalBody section.AddSource input {
+    flex-grow: 1;
+    margin: 0 10px;
+}
+
+.AddModalBody section.AddSource label {
+    margin: 5px 0;
+    vertical-align: middle;
+    font-weight: 600;
+    line-height: unset;
+}
+
+.Source {
+    display: flex;
+}
+.Source span {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+}
+
+.Source .deleteButton {
+    padding: 0;
+    margin: 0;
+    border: 0;
+    line-height: 0;
+    background-color: transparent;
+}
+
+.Source .deleteButton:hover {
+    fill: red;
 }

@@ -1,19 +1,41 @@
 import React from "react";
 import { get } from "./NetService";
+import { getSources } from "../extensibility/LocalStorage";
 
 export const StoreContext = React.createContext("store");
 
 //renamed tags to tagDefs to avoid conflicting definitions with usages.
 const fields = ["pilotGear", "coreBonuses", "shells", "weapons", "systems", "actions", "statuses", "tagDefs"];
 
-const sources = [
+const coreSources = [
     "https://raw.githubusercontent.com/noblebright/lancerdata/master/core.json",
     "https://raw.githubusercontent.com/noblebright/lancerdata/master/GMS.json",
     "https://raw.githubusercontent.com/noblebright/lancerdata/master/IPS-N.json"
 ];
 
+let sources;
 export function load() {
+    sources = [...coreSources, ...getSources()];
     return Promise.all(sources.map(url => get(url))).then(transformStore);
+}
+
+export function loadSource(store, url) {
+    return get(url)
+        .then(result => {
+            processSource(store, result, url);
+            if(result.licenses) {
+                processLicenses(store, result);
+            }
+        })
+        .then(() => {
+            let newStore = buildIndexes(store);
+            console.log(newStore);
+            return newStore;
+        });
+}
+
+export function deleteSource(store, url) {
+
 }
 
 function transformStore(results) {
@@ -31,9 +53,8 @@ function transformStore(results) {
     return store;
 }
 
-//TODO: Unify license and non-license recursive processing
 function processSource(store, result, url) {
-    result.meta.url = url;
+    result.meta.srcUrl = url;
     if(!result.meta.dummyCorp) {
         store.corps[result.meta.corpId] = result.meta;
     }
@@ -48,7 +69,7 @@ function processCollection(store, meta, collection, category, licenseInfo, paren
     collection.forEach(item => {
         item.corpId = meta.corpId;
         item.author = meta.author;
-        item.srcUrl = meta.url;
+        item.srcUrl = meta.srcUrl;
         item.componentType = category;
         store[category][item.id] = item;
         if(licenseInfo) {
@@ -75,7 +96,7 @@ function processLicenses(store, result) {
     }
     Object.keys(result.licenses).forEach(licenseId => {
         const { name, summary, flavor, levels } = result.licenses[licenseId];
-        store.licenses[corpId][licenseId] = { name, summary, flavor, id: licenseId };
+        store.licenses[corpId][licenseId] = { name, summary, flavor, id: licenseId, srcUrl: result.meta.srcUrl };
         levels && levels.forEach((collection, licenseLevel) => {
             fields.forEach(field => {
                 if(collection[field]) {
@@ -92,10 +113,13 @@ function buildIndexes(store) {
         return acc;
     }, {});
 
-    let licenseIndex = {};
+    let licenseIndex = store.licenseIndex || {};
+
     //init licenseIndex
     Object.keys(licenseMap).forEach(licenseId => {
-        licenseIndex[licenseId] = licenseId ? { corp: licenseMap[licenseId], levels: [] } : { corp: licenseMap[licenseId], starter: []} ;
+        if(!licenseIndex[licenseId]) {
+            licenseIndex[licenseId] = licenseId ? { corp: licenseMap[licenseId], levels: [] } : { corp: licenseMap[licenseId], starter: []} ;
+        }
     });
 
     ["weapons", "systems", "shells"].forEach(field => {
@@ -106,7 +130,10 @@ function buildIndexes(store) {
                    console.warn(`no starter equipment corp detected!`);
                    return;
                }
-               licenseIndex[""].starter.push({id: item.id, componentType: field});
+               if(!licenseIndex[""].starter.find(x => field === x.componentType && x.id === item.id)) {
+                   licenseIndex[""].starter.push({id: item.id, componentType: field});
+               }
+
            } else {
                if(!item.license.line) {
                    return; //skip talent items for now.
@@ -122,11 +149,14 @@ function buildIndexes(store) {
                if(!licenseIndex[item.license.line].levels[item.license.level - 1]) {
                    licenseIndex[item.license.line].levels[item.license.level - 1] = [];
                }
-               licenseIndex[item.license.line].levels[item.license.level - 1].push({id: item.id, componentType: field});
+               if(!licenseIndex[item.license.line].levels[item.license.level - 1].find(x => field === x.componentType && x.id === item.id)) {
+                   licenseIndex[item.license.line].levels[item.license.level - 1].push({id: item.id, componentType: field});
+               }
            }
        });
     });
     store.licenseIndex = licenseIndex;
+    return store;
 }
 
 export function withStore(Component) {
