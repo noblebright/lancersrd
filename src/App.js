@@ -14,6 +14,7 @@ import TagDefs from "./TagDefs";
 import Licenses from "./Licenses";
 import CoreBonuses from "./CoreBonuses";
 import {CorpList, default as Corps} from "./Corps";
+import Talents from "./Talents";
 import './App.css';
 
 class App extends Component {
@@ -71,6 +72,7 @@ class App extends Component {
                       <Route path="/tags" component={TagDefs}/>
                       <Route path="/corps" component={Corps}/>
                       <Route path="/licenses" component={Licenses}/>
+                      <Route path="/talents" component={Talents}/>
                   </Switch> }
               </main>
           </StoreContext.Provider>
@@ -103,6 +105,7 @@ const Index = () => (
                     <li><Link to="/shells">Shells List</Link></li>
                     <li><Link to="/statuses">Statuses List</Link></li>
                     <li><Link to="/tags">Tags List</Link></li>
+                    <li><Link to="/talents">Talents List</Link></li>
                 </ul>
             </section>
             <section className="corpIndex">

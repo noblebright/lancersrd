@@ -26,6 +26,9 @@ export function loadSource(store, url) {
             if(result.licenses) {
                 processLicenses(store, result);
             }
+            if(result.talents) {
+                processTalents(store, result);
+            }
         })
         .then(() => {
             let newStore = buildIndexes(store);
@@ -45,6 +48,9 @@ function transformStore(results) {
         processSource(store, result, sources[idx]);
         if(result.licenses) {
             processLicenses(store, result);
+        }
+        if(result.talents) {
+            processTalents(store, result);
         }
     });
     buildIndexes(store);
@@ -104,6 +110,27 @@ function processLicenses(store, result) {
                 }
             });
         })
+    });
+}
+
+function processTalents(store, result) {
+    if(!store.talents) {
+        store.talents = {};
+    }
+    const meta = result.meta;
+    result.talents && result.talents.forEach(talent => {
+        talent.corpId = meta.corpId;
+        talent.author = meta.author;
+        talent.srcUrl = meta.srcUrl;
+        talent.componentType = "talents";
+        store.talents[talent.id] = talent;
+        talent.levels && talent.levels.forEach((collection, talentLevel) => {
+            fields.forEach(field => {
+                if(collection[field]) {
+                    processCollection(store, result.meta, collection[field], field, { talent: talent.id, level: talentLevel + 1 }, "talents", talent.id);
+                }
+            });
+        });
     });
 }
 

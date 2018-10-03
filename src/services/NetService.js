@@ -10,5 +10,5 @@ function request(url, options) {
 }
 
 export function get(url, options) {
-    return request(url, options);
+    return request(url.indexOf("?") === -1 ? `${url}?t=${Date.now()}` : `${url}&t=${Date.now()}`, options);
 }

@@ -97,3 +97,35 @@ ol.LicenseLevels {
 .Source .deleteButton:hover {
     fill: red;
 }
+
+.Talent .flavorText {
+    padding: 10px 40px 20px;
+}
+
+.TalentLevel > td {
+    padding: 10px 20px;
+}
+
+.TalentLevel td:first-child {
+    vertical-align: top;
+    white-space: nowrap;
+    text-align: right;
+    font-weight: 600;
+}
+
+.TalentLevel:nth-child(even) {background: #CCC}
+.TalentLevel:nth-child(odd) {background: #FFF}
+
+.Weapon.Block {
+    border: 1px solid black;
+    display: inline-block;
+    padding: 10px;
+}
+.Weapon.Block td.name {
+    text-align: left;
+}
+
+.Weapon.Block td.rulesText {
+    font-weight: normal;
+    text-align: left;
+}

@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { withStore } from "../services/Store";
-import { getDamageText, getRangeText, Tags } from "../util";
+import { getDamageText, getRangeText, Tags, getWeaponType } from "../util";
 import Markdown from "./Markdown";
 
 const generateRenderer = (type, label, custom) => ({store, id, format}) => {
@@ -33,10 +33,10 @@ export const Weapon = withStore(generateRenderer("weapons", "Weapons", {
         }
 
         return (
-            <table>
+            <table className="Weapon Block">
                 <tbody>
-                <tr><td className="label" colSpan="2">{value.name}</td></tr>
-                <tr><td className="label">Type:</td><td className="value">{value.size} {value.type}</td></tr>
+                <tr><td colSpan="2" className="name">{value.name}</td></tr>
+                <tr><td className="label">Type:</td><td className="value">{value.size} {getWeaponType(value.type)}</td></tr>
                 <tr><td className="label">Tags:</td><td className="value"><Tags tags={value.tags}/></td></tr>
                 <tr><td className="label">Range:</td><td className="value">{getRangeText(value.range, value.threat)}</td></tr>
                 <tr><td className="label">Damage:</td><td className="value">{getDamageText(value.damage)}</td></tr>
@@ -47,5 +47,6 @@ export const Weapon = withStore(generateRenderer("weapons", "Weapons", {
     }
 }));
 export const Action = withStore(generateRenderer("actions", "Actions"));
+export const System = withStore(generateRenderer("systems", "Systems"));
 export const Status = withStore(generateRenderer("statuses", "Statuses"));
 export const Tag = withStore(generateRenderer("tagDefs", "Tag Defs"));

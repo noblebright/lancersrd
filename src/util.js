@@ -118,6 +118,17 @@ export function getDamageText(damages) {
     return damageList.join(" + ");
 }
 
+export function getWeaponType(type) {
+    switch(type) {
+        case "special":
+            return "Special";
+        case "choose":
+            return `(Choose 1; Melee, Rifle, Cannon, Launcher, CQB)`;
+        default:
+            return type;
+    }
+}
+
 export function getStatsText(stats) {
     return Object.keys(stats).sort()
         .map(stat => `${stats[stat] > 0 ? "+" : ""}${stats[stat]} ${stat}`)
