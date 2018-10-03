@@ -11,7 +11,7 @@ export const ListView = ({ data, name, url, hideSource }) => {
                     const current = data[id];
                     return (
                         <div key={id}>
-                            <Link to={`/${url}/${id}`}>{ hideSource ? current.name : `${current.corpId} ${current.name}`}</Link>
+                            <Link to={`/${url}/${id}`}>{ hideSource ? current.name : `${current.corpId ? current.corpId + " " : ""}${current.name}`}</Link>
                         </div>
                     );
                 })}
@@ -22,6 +22,9 @@ export const ListView = ({ data, name, url, hideSource }) => {
 };
 
 const TagList = ({store, tags}) => {
+    if(!tags) {
+        return null;
+    }
     let tagList = Object.keys(tags).sort();
     let elementList = [];
     for(let i = 0; i < tagList.length; i++) {
@@ -60,17 +63,6 @@ const DumbLicense = ({store, license, corpId}) => {
 };
 
 export const License = withStore(DumbLicense);
-
-export function getTagText(store, tags) {
-    const tagList = Object.keys(tags).sort().map(tag => {
-        if(tags[tag] === true) {
-            return tag;
-        } else {
-            return `${tag} ${tags[tag]}`;
-        }
-    });
-    return tagList.join(", ");
-}
 
 export function getRangeText(ranges, threat) {
     let rangeList;
