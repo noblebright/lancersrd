@@ -28,7 +28,7 @@ const Talent = ({store, match}) => {
 };
 
 const TalentLevel = ({level, data}) => (
-    <tr className="TalentLevel"><td>{ `${data.name} ` }(Rank {convertToRoman(level)})</td><td><Markdown>{data.text}</Markdown></td></tr>
+    <tr className="TalentLevel"><td>{ data.name ? `${data.name} ` : ""}(Rank {convertToRoman(level)})</td><td><Markdown>{data.text}</Markdown></td></tr>
 );
 
 const ConnectedTalentIndex = withStore(TalentIndex);
