@@ -14,7 +14,7 @@ const generateRenderer = (type, label, custom) => ({store, id, format}) => {
                 return <span>{`Unknown ${label} ${id}`}</span>
             }
         case "link":
-            return entity ? <Link to={`/${type}/${id}`}>{entity.name}</Link> : <span>Unknown ${label}: {id}</span>
+            return entity ? <Link to={`/${type}/${id}`}>{entity.name}</Link> : <span>Unknown {label}: {id}</span>
         default:
             if(custom) {
                 const Renderer = custom[format];

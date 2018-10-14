@@ -10,7 +10,9 @@ const fields = ["pilotGear", "coreBonuses", "shells", "weapons", "systems", "act
 const coreSources = [
     "https://raw.githubusercontent.com/noblebright/lancerdata/master/core.json",
     "https://raw.githubusercontent.com/noblebright/lancerdata/master/GMS.json",
-    "https://raw.githubusercontent.com/noblebright/lancerdata/master/IPS-N.json"
+    "https://raw.githubusercontent.com/noblebright/lancerdata/master/IPS-N.json",
+    "https://raw.githubusercontent.com/noblebright/lancerdata/master/HA.json",
+    "https://raw.githubusercontent.com/noblebright/lancerdata/master/HORUS.json",
 ];
 
 let sources;

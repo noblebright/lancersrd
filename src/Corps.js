@@ -10,6 +10,14 @@ const Corp = ({store, match}) => {
     const corpId = match.params.id;
     const data = store.corps[corpId];
     const licenses = store.licenses[corpId];
+    const coreBonuses = [];
+    Object.keys(store.coreBonuses).forEach(key => {
+        let bonus = store.coreBonuses[key];
+        if(bonus.corpId === corpId) {
+            coreBonuses.push(bonus);
+        }
+    });
+
     if(!data) {
         return <h1>Unknown Identifier</h1>;
     }
@@ -22,6 +30,14 @@ const Corp = ({store, match}) => {
             <h5>Licenses</h5>
             <ul>
                 {Object.keys(licenses).map(key => <li key={key}><Link to={`/licenses/${key || "_"}`}>{licenses[key].name} ({licenses[key].summary})</Link></li>)}
+            </ul>
+            <h5>Core Bonuses</h5>
+            <ul>
+                {coreBonuses.map(bonus =>
+                    <li key={bonus.id}>
+                        <b>{bonus.name}</b>
+                        <div><Markdown>{bonus.text}</Markdown></div>
+                    </li>)}
             </ul>
             <footer>
                 <Link to="/corps">Back to Corps List</Link>
